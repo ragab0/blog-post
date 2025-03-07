@@ -1,25 +1,19 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "@/store/store";
-import { setPosts, setLoading } from "@/store/features/blog/blogSlice";
-import { mockPosts } from "@/assets/dummyData";
+import { useBlog } from "@/hooks/useBlog";
 import PostCard, { PostCardSkel } from "./components/PostCard";
 
 export default function HomePage() {
-  const dispatch = useDispatch();
   const { posts, loading, error } = useSelector(
     (state: RootState) => state.blog
   );
+  const { fetchPosts } = useBlog();
 
   useEffect(() => {
-    dispatch(setLoading(true));
-    // Simulate API call
-    setTimeout(() => {
-      dispatch(setPosts(mockPosts));
-      dispatch(setLoading(false));
-    }, 1000);
-  }, [dispatch]);
+    fetchPosts();
+  }, []);
 
   if (error) {
     return <div className="text-center text-destructive">{error}</div>;

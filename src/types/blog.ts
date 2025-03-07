@@ -28,3 +28,15 @@ export interface User {
   email: string;
   avatar: string;
 }
+export interface BlogState {
+  posts: Post[];
+  currentPost: Post | null;
+  loading: boolean;
+  error: string | null;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { addPost } from "@/store/features/blog/blogSlice";
-import { RootState } from "@/store/store";
+// import { useToast } from "@/hooks/use-toast";
+// import { addPost } from "@/store/features/blog/blogSlice";
+// import { RootState } from "@/store/store";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -23,10 +23,10 @@ const schema = yup.object({
 type FormData = yup.InferType<typeof schema>;
 
 export default function CreatePostPage() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const user = useSelector((state: RootState) => state.auth.user);
+  // const { toast } = useToast();
+  // const user = useSelector((state: RootState) => state.auth.user);
 
   const {
     register,
@@ -37,35 +37,37 @@ export default function CreatePostPage() {
   });
 
   const onSubmit = async (data: FormData) => {
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const newPost = {
-        id: Date.now().toString(),
-        title: data.title,
-        content: data.content,
-        author: {
-          id: user?.id || "",
-          name: user?.name || "",
-          avatar: user?.avatar || "",
-        },
-        createdAt: new Date().toISOString(),
-        comments: [],
-      };
-      dispatch(addPost(newPost));
-      toast({
-        title: "Success",
-        description: "Your post has been published.",
-      });
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to publish post. Please try again.",
-      });
-    }
+    console.log(data);
+
+    // try {
+    //   // Simulate API call
+    //   await new Promise((resolve) => setTimeout(resolve, 1000));
+    //   const newPost = {
+    //     id: Date.now().toString(),
+    //     title: data.title,
+    //     content: data.content,
+    //     author: {
+    //       id: user?.id || "",
+    //       name: user?.name || "",
+    //       avatar: user?.avatar || "",
+    //     },
+    //     createdAt: new Date().toISOString(),
+    //     comments: [],
+    //   };
+    //   dispatch(addPost(newPost));
+    //   toast({
+    //     title: "Success",
+    //     description: "Your post has been published.",
+    //   });
+    //   navigate("/");
+    // } catch (error) {
+    //   console.log(error);
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Error",
+    //     description: "Failed to publish post. Please try again.",
+    //   });
+    // }
   };
 
   return (

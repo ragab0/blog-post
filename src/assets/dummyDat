@@ -1,4 +1,0 @@
-declare module "@/assets/dummyData" {
-  const value: object;
-  export default value;
-}

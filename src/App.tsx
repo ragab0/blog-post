@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/Navbar";
 import HomePage from "@/pages/home/HomePage";
 import PostDetailPage from "@/pages/postDetail/PostDetailPage";
@@ -23,7 +23,7 @@ function App() {
               <Route path="/create" element={<CreatePostPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              {/* <Route path="*" element={} /> */}
+              <Route path="*" element={<h1>Not found *_*</h1>} />
             </Routes>
           </main>
           <Toaster />

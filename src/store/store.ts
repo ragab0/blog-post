@@ -1,12 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import blogReducer from "./features/blog/blogSlice";
 import authReducer from "./features/auth/authSlice";
+import blogReducer from "./features/blog/blogSlice";
 
 export const store = configureStore({
   reducer: {
-    blog: blogReducer,
     auth: authReducer,
+    blog: blogReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
