@@ -9,7 +9,7 @@ export const login = createAsyncThunk(
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
       const response = await api.post("/auth/login", credentials);
-      return response.data;
+      return response.data.user; // {accessToken, user};
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -24,7 +24,7 @@ export const register = createAsyncThunk(
   async (credentials: RegisterCredentials, { rejectWithValue }) => {
     try {
       const response = await api.post("/auth/register", credentials);
-      return response.data;
+      return response.data.user; // // {accessToken, user};
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(

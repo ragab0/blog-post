@@ -20,40 +20,15 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema),
   });
 
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
 
   const onSubmit = async (data: FormData) => {
     login(data.email, data.password);
-    // try {
-    //   // Simulate API call
-    //   await new Promise((resolve) => setTimeout(resolve, 1000));
-    //   dispatch(
-    //     setUser({
-    //       id: "1",
-    //       name: "John Doe",
-    //       email: data.email,
-    //       avatar:
-    //         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-    //     })
-    //   );
-    //   toast({
-    //     title: "Success",
-    //     description: "You have successfully logged in.",
-    //   });
-    //   navigate("/");
-    // } catch (error) {
-    //   console.log(error);
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Error",
-    //     description: "Failed to log in. Please try again.",
-    //   });
-    // }
   };
 
   return (
@@ -92,8 +67,8 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Logging in..." : "Login"}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
         </CardContent>

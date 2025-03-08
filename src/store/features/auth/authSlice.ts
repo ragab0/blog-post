@@ -11,6 +11,7 @@ import {
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
+  isInitialized: false,
   loading: false,
   error: null,
 };
@@ -27,33 +28,35 @@ const authSlice = createSlice({
     // Login
     builder
       .addCase(login.pending, (state) => {
+        state.isInitialized = false;
         state.loading = true;
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
       })
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+      .addCase(login.rejected, (_, action) => {
+        return { ...initialState, error: action.payload as string };
       });
 
     // Register
     builder
       .addCase(register.pending, (state) => {
+        state.isInitialized = false;
         state.loading = true;
         state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
       })
-      .addCase(register.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+      .addCase(register.rejected, (_, action) => {
+        return { ...initialState, error: action.payload as string };
       });
 
     // Logout
@@ -75,15 +78,18 @@ const authSlice = createSlice({
     // Get Profile
     builder
       .addCase(getProfile.pending, (state) => {
+        state.isInitialized = false;
         state.loading = true;
         state.error = null;
       })
       .addCase(getProfile.fulfilled, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
       })
       .addCase(getProfile.rejected, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.error = action.payload as string;
       });

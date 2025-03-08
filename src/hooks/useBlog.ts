@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState, AppDispatch } from "@/store/store";
+import { toast } from "sonner";
 import { resetError, resetCurrentPost } from "@/store/features/blog/blogSlice";
-import { useToast } from "./use-toast";
 import {
   fetchPosts,
   fetchPostById,
@@ -15,25 +15,23 @@ import {
 export const useBlog = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const { posts, currentPost, loading, error, pagination } = useSelector(
-    (state: RootState) => state.blog
-  );
+  const {
+    posts,
+    currentPost,
+    isInitialized,
+    loading,
+    error,
+    pagination,
+    lastFetchTime,
+  } = useSelector((state: RootState) => state.blog);
 
   const handleCreatePost = async (title: string, content: string) => {
     try {
       await dispatch(createPost({ title, content })).unwrap();
-      toast({
-        title: "Success",
-        description: "Post created successfully",
-      });
+      toast.success("Post created successfully");
       navigate("/");
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error as string,
-      });
+      toast.error(error as string);
     }
   };
 
@@ -43,49 +41,28 @@ export const useBlog = () => {
   ) => {
     try {
       await dispatch(updatePost({ id, data })).unwrap();
-      toast({
-        title: "Success",
-        description: "Post updated successfully",
-      });
+      toast.success("Post updated successfully");
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error as string,
-      });
+      toast.error(error as string);
     }
   };
 
   const handleDeletePost = async (id: string) => {
     try {
       await dispatch(deletePost(id)).unwrap();
-      toast({
-        title: "Success",
-        description: "Post deleted successfully",
-      });
+      toast("Post deleted successfully");
       navigate("/");
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error as string,
-      });
+      toast(error as string);
     }
   };
 
   const handleAddComment = async (postId: string, content: string) => {
     try {
       await dispatch(addComment({ postId, content })).unwrap();
-      toast({
-        title: "Success",
-        description: "Comment added successfully",
-      });
+      toast("Comment added successfully");
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error as string,
-      });
+      toast(error as string);
     }
   };
 
@@ -95,8 +72,10 @@ export const useBlog = () => {
   return {
     posts,
     currentPost,
+    isInitialized,
     loading,
     error,
+    lastFetchTime,
     pagination,
     fetchPosts: handleFetchPosts,
     fetchPostById: (id: string) => dispatch(fetchPostById(id)),

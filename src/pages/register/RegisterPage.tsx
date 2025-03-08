@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 // import { useToast } from "@/hooks/use-toast";
 // import { setUser } from "@/store/features/auth/authSlice";
 import { registerSchema } from "@/validations/auth";
+import { useAuth } from "@/hooks/useAuth";
 
 type FormData = yup.InferType<typeof registerSchema>;
 
@@ -20,39 +21,15 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema),
   });
 
-  const onSubmit = async (data: FormData) => {
-    console.log(data);
+  const { register: handleRegister, loading } = useAuth();
 
-    // try {
-    //   // Simulate API call
-    //   await new Promise((resolve) => setTimeout(resolve, 1000));
-    //   dispatch(
-    //     setUser({
-    //       id: "1",
-    //       name: data.name,
-    //       email: data.email,
-    //       avatar:
-    //         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-    //     })
-    //   );
-    //   toast({
-    //     title: "Success",
-    //     description: "Your account has been created.",
-    //   });
-    //   navigate("/");
-    // } catch (error) {
-    //   console.log(error);
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Error",
-    //     description: "Failed to create account. Please try again.",
-    //   });
-    // }
+  const onSubmit = async (data: FormData) => {
+    handleRegister(data.name, data.email, data.password);
   };
 
   return (
@@ -118,8 +95,8 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Creating Account..." : "Register"}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating Account..." : "Register"}
             </Button>
           </form>
         </CardContent>

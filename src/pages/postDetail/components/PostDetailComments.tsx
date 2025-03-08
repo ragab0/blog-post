@@ -4,57 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Post } from "@/types/blog";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function PostDetailComments({
   post,
-  setPost,
 }: {
   post: Post;
-  setPost: React.Dispatch<React.SetStateAction<Post | null>>;
+  updatePost: (id: string, data: Partial<Post>) => void;
 }) {
-  const { toast } = useToast();
   const [comment, setComment] = useState("");
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { isAuthenticated } = useAuth();
 
   const handleCommentSubmit = async () => {
     if (!comment.trim()) return;
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const newComment = {
-        id: Date.now().toString(),
-        content: comment,
-        author: {
-          id: user?.id || "",
-          name: user?.name || "",
-          avatar: user?.avatar || "",
-        },
-        createdAt: new Date().toISOString(),
-      };
-
-      setPost((prev) =>
-        prev ? { ...prev, comments: [...prev.comments, newComment] } : null
-      );
-      setComment("");
-      toast({
-        title: "Success",
-        description: "Comment added successfully.",
-      });
-    } catch (error) {
-      console.log(error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to add comment.",
-      });
-    }
   };
 
   return (
@@ -71,7 +34,9 @@ export default function PostDetailComments({
               onChange={(e) => setComment(e.target.value)}
             />
             <div className="flex justify-end">
-              <Button onClick={handleCommentSubmit}>Post Comment</Button>
+              <Button onClick={handleCommentSubmit} disabled={true}>
+                Post Comment
+              </Button>
             </div>
           </div>
         )}

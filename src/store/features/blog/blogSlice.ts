@@ -12,8 +12,10 @@ import {
 const initialState: BlogState = {
   posts: [],
   currentPost: null,
+  isInitialized: false,
   loading: false,
   error: null,
+  lastFetchTime: null,
   pagination: {
     page: 1,
     limit: 10,
@@ -32,15 +34,20 @@ const blogSlice = createSlice({
     resetCurrentPost: (state) => {
       state.currentPost = null;
     },
+    setLastFetchTime: (state, action) => {
+      state.lastFetchTime = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // Fetch Posts
     builder
       .addCase(fetchPosts.pending, (state) => {
+        state.isInitialized = false;
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.posts = action.payload.items;
         state.pagination = {
@@ -51,6 +58,7 @@ const blogSlice = createSlice({
         };
       })
       .addCase(fetchPosts.rejected, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -58,14 +66,17 @@ const blogSlice = createSlice({
     // Fetch Post by ID
     builder
       .addCase(fetchPostById.pending, (state) => {
+        state.isInitialized = false;
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchPostById.fulfilled, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.currentPost = action.payload;
       })
       .addCase(fetchPostById.rejected, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -88,10 +99,12 @@ const blogSlice = createSlice({
     // Update Post
     builder
       .addCase(updatePost.pending, (state) => {
+        state.isInitialized = false;
         state.loading = true;
         state.error = null;
       })
       .addCase(updatePost.fulfilled, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         const index = state.posts.findIndex(
           (post) => post.id === action.payload.id
@@ -104,6 +117,7 @@ const blogSlice = createSlice({
         }
       })
       .addCase(updatePost.rejected, (state, action) => {
+        state.isInitialized = true;
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -145,5 +159,6 @@ const blogSlice = createSlice({
   },
 });
 
-export const { resetError, resetCurrentPost } = blogSlice.actions;
+export const { resetError, resetCurrentPost, setLastFetchTime } =
+  blogSlice.actions;
 export default blogSlice.reducer;

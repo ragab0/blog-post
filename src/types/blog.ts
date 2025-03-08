@@ -5,7 +5,7 @@ export interface Post {
   author: {
     id: string;
     name: string;
-    avatar: string;
+    avatar?: string;
   };
   createdAt: string;
   comments: Comment[];
@@ -31,8 +31,10 @@ export interface User {
 export interface BlogState {
   posts: Post[];
   currentPost: Post | null;
+  isInitialized: boolean;
   loading: boolean;
   error: string | null;
+  lastFetchTime: Date | null;
   pagination: {
     page: number;
     limit: number;

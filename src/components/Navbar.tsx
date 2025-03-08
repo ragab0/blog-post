@@ -1,32 +1,37 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
-import { PenSquare } from "lucide-react";
+import { LogOutIcon, PenSquare } from "lucide-react";
+import { Skeleton } from "./ui/skeleton";
+import { useAuth } from "@/hooks/useAuth";
+import Logo from "./Logo";
 
 export default function Navbar() {
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { isAuthenticated, loading, isInitialized, logout } = useAuth();
 
   return (
     <nav className="border-b bg-card">
-      <div className="container mx-auto p-4 flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold">
-          DevBlog
-        </Link>
-        <div className="flex items-center gap-4">
-          {isAuthenticated ? (
+      <div className="container mx-auto p-4 flex items-center justify-between gap-8">
+        <Logo />
+        <div className="flex items-center gap-4 flex-wrap justify-end">
+          {!isInitialized && loading ? (
+            <Skel />
+          ) : isAuthenticated ? (
             <>
-              <Link to="/create">
-                <Button variant="outline" size="sm">
+              <Link to="/create" className="flex-1">
+                <Button variant="outline" size="sm" className="w-full">
                   <PenSquare className="mr-2 h-4 w-4" />
                   Write Post
                 </Button>
               </Link>
-              <span className="text-sm text-muted-foreground">
-                Welcome, {user?.name}
-              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={logout}
+                className="flex-1"
+              >
+                <LogOutIcon className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
             </>
           ) : (
             <>
@@ -43,5 +48,14 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+  );
+}
+
+function Skel() {
+  return (
+    <div className="flex items-center gap-4">
+      <Skeleton className="h-4 w-20" />
+      <Skeleton className="h-8 w-8 rounded-full" />
+    </div>
   );
 }

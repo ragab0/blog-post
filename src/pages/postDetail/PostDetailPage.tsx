@@ -1,52 +1,37 @@
 import PostDetailComments from "./components/PostDetailComments";
-import { mockPost } from "@/assets/dummyData";
-import { useEffect, useState } from "react";
-import { Post } from "@/types/blog";
-import { useToast } from "@/hooks/use-toast";
+import PostActions from "./components/PostActions";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useBlog } from "@/hooks/useBlog";
 import PostDetailCard, {
   PostDetailCardSkel,
 } from "./components/PostDetailCard";
 
 export default function PostDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
+  const { fetchPostById, isInitialized, loading, currentPost, updatePost } =
+    useBlog();
 
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (id) {
+      if (currentPost && currentPost.id === id) return;
+      fetchPostById(id);
+    }
+  }, []);
 
-        setPost(mockPost);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load post.",
-        });
-      }
-    };
-
-    fetchPost();
-  }, [id, toast]);
-
-  if (loading) {
+  if (!isInitialized || loading) {
     return <PostDetailCardSkel />;
   }
 
-  if (!post) {
+  if (!currentPost) {
     return <div className="text-center text-destructive">Post not found</div>;
   }
 
   return (
     <div className="post-detail-page mx-auto max-w-3xl space-y-6">
-      <PostDetailCard post={post} />
-      <PostDetailComments post={post} setPost={setPost} />
+      <PostActions postId={currentPost.id} authorId={currentPost.author.id} />
+      <PostDetailCard post={currentPost} />
+      <PostDetailComments post={currentPost} updatePost={updatePost} />
     </div>
   );
 }
