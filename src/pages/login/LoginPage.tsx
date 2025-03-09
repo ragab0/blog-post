@@ -7,16 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { useToast } from "@/hooks/use-toast";
 import { loginSchema } from "@/validations/auth";
 import { useAuth } from "@/hooks/useAuth";
 
 type FormData = yup.InferType<typeof loginSchema>;
 
 export default function LoginPage() {
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const { toast } = useToast();
   const {
     register,
     handleSubmit,
