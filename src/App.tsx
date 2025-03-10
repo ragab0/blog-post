@@ -17,14 +17,10 @@ import PublicRoute from "./components/PublicRoute";
 import EditPostPage from "./pages/editPost/EditPostPage";
 
 function AppRoutes() {
-  const { getProfile } = useAuth();
+  const { isAuth } = useAuth();
 
   useEffect(() => {
-    // Check for token and fetch user profile
-    const token = localStorage.getItem("token");
-    if (token) {
-      getProfile();
-    }
+    isAuth();
   }, []);
 
   return (

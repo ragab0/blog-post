@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState, AppDispatch } from "@/store/store";
-import { resetError } from "@/store/features/auth/authSlice";
+import { initAuth, resetError } from "@/store/features/auth/authSlice";
 import { toast } from "sonner";
 import {
   login,
@@ -73,6 +73,19 @@ export const useAuth = () => {
     }
   }, [dispatch]);
 
+  function isAuth() {
+    console.log("IS AUTH FUNCTION");
+    // Check for token and fetch user profile
+    const token = localStorage.getItem("token");
+    if (token && !isInitialized) {
+      dispatch(getProfile()).unwrap();
+      console.log("ISAUTH: GET PROFILE");
+    } else {
+      dispatch(initAuth());
+      console.log("ISAUTH: init");
+    }
+  }
+
   return {
     user,
     isAuthenticated,
@@ -85,5 +98,6 @@ export const useAuth = () => {
     getProfile: handleGetProfile,
     updateProfile: handleUpdateProfile,
     resetError: () => dispatch(resetError()),
+    isAuth,
   };
 };

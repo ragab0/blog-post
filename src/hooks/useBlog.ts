@@ -42,6 +42,7 @@ export const useBlog = () => {
     try {
       await dispatch(updatePost({ id, data })).unwrap();
       toast.success("Post updated successfully");
+      navigate("/post/" + id);
     } catch (error) {
       toast.error(error as string);
     }

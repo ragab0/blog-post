@@ -6,14 +6,14 @@ import { useAuth } from "@/hooks/useAuth";
 import Logo from "./Logo";
 
 export default function Navbar() {
-  const { isAuthenticated, loading, isInitialized, logout } = useAuth();
+  const { isAuthenticated, isInitialized, logout } = useAuth();
 
   return (
     <nav className="border-b bg-card">
       <div className="container mx-auto p-4 flex items-center justify-between gap-8">
         <Logo />
         <div className="flex items-center gap-4 flex-wrap justify-end">
-          {!isInitialized && loading ? (
+          {!isInitialized ? (
             <Skel />
           ) : isAuthenticated ? (
             <>

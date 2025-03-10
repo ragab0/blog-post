@@ -23,6 +23,9 @@ const authSlice = createSlice({
     resetError: (state) => {
       state.error = null;
     },
+    initAuth: (state) => {
+      state.isInitialized = true;
+    },
   },
   extraReducers: (builder) => {
     // Login
@@ -92,6 +95,7 @@ const authSlice = createSlice({
         state.isInitialized = true;
         state.loading = false;
         state.error = action.payload as string;
+        state.isAuthenticated = false;
       });
 
     // Update Profile
@@ -111,5 +115,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { resetError } = authSlice.actions;
+export const { resetError, initAuth } = authSlice.actions;
 export default authSlice.reducer;
